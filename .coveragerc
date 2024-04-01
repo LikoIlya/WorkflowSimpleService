@@ -1,8 +1,8 @@
 [run]
-source = workflowsimpleservice
+source = workflow
 
 [report]
 omit =
     */python?.?/*
     */site-packages/nose/*
-    workflowsimpleservice/__main__.py
+    workflow/__main__.py

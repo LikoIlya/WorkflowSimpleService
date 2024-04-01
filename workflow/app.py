@@ -23,6 +23,7 @@ def read(*paths, **kwargs):
 
 
 description = """
+<<<<<<<< HEAD:workflowsimpleservice/app.py
 workflowsimpleservice API helps you do awesome stuff. 🚀
 """
 
@@ -35,6 +36,20 @@ app = FastAPI(
         "name": "LikoIlya",
         "url": "http://workflowsimpleservice.com/contact/",
         "email": "LikoIlya@workflowsimpleservice.com",
+========
+workflow API helps you do awesome stuff. 🚀
+"""
+
+app = FastAPI(
+    title="workflow",
+    description=description,
+    version=read("VERSION"),
+    terms_of_service="http://workflow.service/terms/",
+    contact={
+        "name": "LikoIlya",
+        "url": "http://workflow.service/contact/",
+        "email": "LikoIlya@workflow.service",
+>>>>>>>> cac4d36 (✅ Ready to clone and code.):workflow/app.py
     },
     license_info={
         "name": "The Unlicense",

@@ -7,9 +7,9 @@ from sqlalchemy.exc import IntegrityError
 
 # This next line ensures tests uses its own database and settings environment
 os.environ["FORCE_ENV_FOR_DYNACONF"] = "testing"  # noqa
-# WARNING: Ensure imports from `workflowsimpleservice` comes after this line
-from workflowsimpleservice import app, settings, db  # noqa
-from workflowsimpleservice.cli import create_user, cli  # noqa
+# WARNING: Ensure imports from `workflow` comes after this line
+from workflow import app, settings, db  # noqa
+from workflow.cli import create_user, cli  # noqa
 
 
 # each test runs on cwd to its temp dir

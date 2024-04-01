@@ -26,20 +26,20 @@ install:          ## Install the project in dev mode.
 
 .PHONY: fmt
 fmt:              ## Format code using black & isort.
-	$(ENV_PREFIX)isort workflowsimpleservice/
-	$(ENV_PREFIX)black -l 79 workflowsimpleservice/
+	$(ENV_PREFIX)isort workflow/
+	$(ENV_PREFIX)black -l 79 workflow/
 	$(ENV_PREFIX)black -l 79 tests/
 
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
-	$(ENV_PREFIX)flake8 workflowsimpleservice/
-	$(ENV_PREFIX)black -l 79 --check workflowsimpleservice/
+	$(ENV_PREFIX)flake8 workflow/
+	$(ENV_PREFIX)black -l 79 --check workflow/
 	$(ENV_PREFIX)black -l 79 --check tests/
-	$(ENV_PREFIX)mypy --ignore-missing-imports workflowsimpleservice/
+	$(ENV_PREFIX)mypy --ignore-missing-imports workflow/
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
-	$(ENV_PREFIX)pytest -v --cov-config .coveragerc --cov=workflowsimpleservice -l --tb=short --maxfail=1 tests/
+	$(ENV_PREFIX)pytest -v --cov-config .coveragerc --cov=workflow -l --tb=short --maxfail=1 tests/
 	$(ENV_PREFIX)coverage xml
 	$(ENV_PREFIX)coverage html
 
@@ -80,9 +80,9 @@ release:          ## Create a new tag for release.
 	@read -p "Version? (provide the next x.y.z semver) : " TAG
 	@echo "creating git tag : $${TAG}"
 	@git tag $${TAG}
-	@echo "$${TAG}" > workflowsimpleservice/VERSION
+	@echo "$${TAG}" > workflow/VERSION
 	@$(ENV_PREFIX)gitchangelog > HISTORY.md
-	@git add workflowsimpleservice/VERSION HISTORY.md
+	@git add workflow/VERSION HISTORY.md
 	@git commit -m "release: version $${TAG} 🚀"
 	@git push -u origin HEAD --tags
 	@echo "Github Actions will detect the new tag and release the new version."
@@ -101,7 +101,7 @@ switch-to-poetry: ## Switch to poetry package manager.
 	@poetry init --no-interaction --name=a_flask_test --author=rochacbruno
 	@echo "" >> pyproject.toml
 	@echo "[tool.poetry.scripts]" >> pyproject.toml
-	@echo "workflowsimpleservice = 'workflowsimpleservice.__main__:main'" >> pyproject.toml
+	@echo "workflow = 'workflow.__main__:main'" >> pyproject.toml
 	@cat requirements.txt | while read in; do poetry add --no-interaction "$${in}"; done
 	@cat requirements-test.txt | while read in; do poetry add --no-interaction "$${in}" --dev; done
 	@poetry install --no-interaction
@@ -109,7 +109,7 @@ switch-to-poetry: ## Switch to poetry package manager.
 	@mv requirements* .github/backup
 	@mv setup.py .github/backup
 	@echo "You have switched to https://python-poetry.org/ package manager."
-	@echo "Please run 'poetry shell' or 'poetry run workflowsimpleservice'"
+	@echo "Please run 'poetry shell' or 'poetry run workflow'"
 
 .PHONY: init
 init:             ## Initialize the project based on an application template.
@@ -118,27 +118,27 @@ init:             ## Initialize the project based on an application template.
 .PHONY: shell
 shell:            ## Open a shell in the project.
 	@if [ "$(USING_POETRY)" ]; then poetry shell; exit; fi
-	@./.venv/bin/ipython -c "from workflowsimpleservice import *"
+	@./.venv/bin/ipython -c "from workflow import *"
 
 .PHONY: docker-build
 docker-build:	  ## Builder docker images
-	@docker-compose -f docker-compose-dev.yaml -p workflowsimpleservice build
+	@docker-compose -f docker-compose-dev.yaml -p workflow build
 
 .PHONY: docker-run
 docker-run:  	  ## Run docker development images
-	@docker-compose -f docker-compose-dev.yaml -p workflowsimpleservice up -d
+	@docker-compose -f docker-compose-dev.yaml -p workflow up -d
 
 .PHONY: docker-stop
 docker-stop: 	  ## Bring down docker dev environment
-	@docker-compose -f docker-compose-dev.yaml -p workflowsimpleservice down
+	@docker-compose -f docker-compose-dev.yaml -p workflow down
 
 .PHONY: docker-ps
 docker-ps: 	  ## Bring down docker dev environment
-	@docker-compose -f docker-compose-dev.yaml -p workflowsimpleservice ps
+	@docker-compose -f docker-compose-dev.yaml -p workflow ps
 
 .PHONY: docker-log
 docker-logs: 	  ## Bring down docker dev environment
-	@docker-compose -f docker-compose-dev.yaml -p workflowsimpleservice logs -f app
+	@docker-compose -f docker-compose-dev.yaml -p workflow logs -f app
 
 # This project has been generated from rochacbruno/fastapi-project-template
 # __author__ = 'rochacbruno'

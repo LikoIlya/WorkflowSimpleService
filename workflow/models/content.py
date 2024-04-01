@@ -5,7 +5,11 @@ from pydantic import BaseModel, Extra
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
+<<<<<<<< HEAD:workflowsimpleservice/models/content.py
     from workflowsimpleservice.security import User
+========
+    from workflow.security import User
+>>>>>>>> cac4d36 (✅ Ready to clone and code.):workflow/models/content.py
 
 
 class Content(SQLModel, table=True):

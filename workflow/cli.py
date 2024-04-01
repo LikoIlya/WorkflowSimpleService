@@ -8,7 +8,11 @@ from .db import create_db_and_tables, engine
 from .models.content import Content
 from .security import User
 
+<<<<<<<< HEAD:workflowsimpleservice/cli.py
 cli = typer.Typer(name="workflowsimpleservice API")
+========
+cli = typer.Typer(name="workflow API")
+>>>>>>>> cac4d36 (✅ Ready to clone and code.):workflow/cli.py
 
 
 @cli.command()
@@ -20,7 +24,11 @@ def run(
 ):  # pragma: no cover
     """Run the API server."""
     uvicorn.run(
+<<<<<<<< HEAD:workflowsimpleservice/cli.py
         "workflowsimpleservice.app:app",
+========
+        "workflow.app:app",
+>>>>>>>> cac4d36 (✅ Ready to clone and code.):workflow/cli.py
         host=host,
         port=port,
         log_level=log_level,

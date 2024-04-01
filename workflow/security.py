@@ -8,7 +8,11 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlmodel import Field, Relationship, Session, SQLModel
 
+<<<<<<<< HEAD:workflowsimpleservice/security.py
 from workflowsimpleservice.models.content import Content, ContentResponse
+========
+from workflow.models.content import Content, ContentResponse
+>>>>>>>> cac4d36 (✅ Ready to clone and code.):workflow/security.py
 
 from .config import settings
 from .db import engine

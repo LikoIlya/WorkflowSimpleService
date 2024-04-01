@@ -38,7 +38,7 @@ See also
 - ✅ Code linting using [flake8](https://flake8.pycqa.org/en/latest/)
 - 📊 Code coverage reports using [codecov](https://about.codecov.io/sign-up/)
 - 🛳️ Automatic release to [PyPI](https://pypi.org) using [twine](https://twine.readthedocs.io/en/latest/) and github actions.
-- 🎯 Entry points to execute your program using `python -m <workflowsimpleservice>` or `$ workflowsimpleservice` with basic CLI argument parsing.
+- 🎯 Entry points to execute your program using `python -m <workflow>` or `$ workflow` with basic CLI argument parsing.
 - 🔄 Continuous integration using [Github Actions](.github/workflows/) with jobs to lint, test and release your project on Linux, Mac and Windows environments.
 
 > Curious about architectural decisions on this template? read [ABOUT_THIS_TEMPLATE.md](ABOUT_THIS_TEMPLATE.md)  
@@ -49,51 +49,51 @@ See also
 <!--  DELETE THE LINES ABOVE THIS AND WRITE YOUR PROJECT README BELOW -->
 
 ---
-# workflowsimpleservice
+# Workflow Service
 
 [![codecov](https://codecov.io/gh/LikoIlya/WorkflowSimpleService/branch/main/graph/badge.svg?token=WorkflowSimpleService_token_here)](https://codecov.io/gh/LikoIlya/WorkflowSimpleService)
 [![CI](https://github.com/LikoIlya/WorkflowSimpleService/actions/workflows/main.yml/badge.svg)](https://github.com/LikoIlya/WorkflowSimpleService/actions/workflows/main.yml)
 
-Awesome workflowsimpleservice created by LikoIlya
+Awesome "Workflow service" created by LikoIlya
 
 ## Install
 
 from source
 ```bash
-git clone https://github.com/LikoIlya/WorkflowSimpleService workflowsimpleservice
-cd workflowsimpleservice
+git clone https://github.com/LikoIlya/WorkflowSimpleService workflow
+cd workflow
 make install
 ```
 
 from pypi
 
 ```bash
-pip install workflowsimpleservice
+pip install workflow
 ```
 
 ## Executing
 
 ```bash
-$ workflowsimpleservice run --port 8080
+$ workflow run --port 8080
 ```
 
 or
 
 ```bash
-python -m workflowsimpleservice run --port 8080
+python -m workflow run --port 8080
 ```
 
 or
 
 ```bash
-$ uvicorn workflowsimpleservice:app
+$ uvicorn workflow:app
 ```
 
 ## CLI
 
 ```bash
-❯ workflowsimpleservice --help
-Usage: workflowsimpleservice [OPTIONS] COMMAND [ARGS]...
+❯ workflow --help
+Usage: workflow [OPTIONS] COMMAND [ARGS]...
 
 Options:
   --install-completion [bash|zsh|fish|powershell|pwsh]
@@ -112,8 +112,8 @@ Commands:
 ### Creating a user
 
 ```bash
-❯ workflowsimpleservice create-user --help
-Usage: workflowsimpleservice create-user [OPTIONS] USERNAME PASSWORD
+❯ workflow create-user --help
+Usage: workflow create-user [OPTIONS] USERNAME PASSWORD
 
   Create user
 
@@ -129,7 +129,7 @@ Options:
 **IMPORTANT** To create an admin user on the first run:
 
 ```bash
-workflowsimpleservice create-user admin admin --superuser
+workflow create-user admin admin --superuser
 ```
 
 ### The Shell
@@ -137,7 +137,7 @@ workflowsimpleservice create-user admin admin --superuser
 You can enter an interactive shell with all the objects imported.
 
 ```bash
-❯ workflowsimpleservice shell       
+❯ workflow shell       
 Auto imports: ['app', 'settings', 'User', 'engine', 'cli', 'create_user', 'select', 'session', 'Content']
 
 In [1]: session.query(Content).all()
@@ -151,12 +151,12 @@ Out[3]: [Content(text='string', title='string', created_time='2021-09-14T19:25:0
 
 ## API
 
-Run with `workflowsimpleservice run` and access http://127.0.0.1:8000/docs
+Run with `workflow run` and access http://127.0.0.1:8000/docs
 
 ![](https://raw.githubusercontent.com/rochacbruno/fastapi-project-template/master/docs/api.png)
 
 
-**For some api calls you must authenticate** using the user created with `workflowsimpleservice create-user`.
+**For some api calls you must authenticate** using the user created with `workflow create-user`.
 
 ## Testing
 
@@ -189,18 +189,18 @@ tests/test_user_api.py::test_user_create PASSED                           [100%]
 ----------- coverage: platform linux, python 3.9.6-final-0 -----------
 Name                              Stmts   Miss  Cover
 -----------------------------------------------------
-workflowsimpleservice/__init__.py              4      0   100%
-workflowsimpleservice/app.py                  16      1    94%
-workflowsimpleservice/cli.py                  21      0   100%
-workflowsimpleservice/config.py                5      0   100%
-workflowsimpleservice/db.py                   10      0   100%
-workflowsimpleservice/models/__init__.py       0      0   100%
-workflowsimpleservice/models/content.py       47      1    98%
-workflowsimpleservice/routes/__init__.py      11      0   100%
-workflowsimpleservice/routes/content.py       52     25    52%
-workflowsimpleservice/routes/security.py      15      1    93%
-workflowsimpleservice/routes/user.py          52     26    50%
-workflowsimpleservice/security.py            103     12    88%
+workflow/__init__.py              4      0   100%
+workflow/app.py                  16      1    94%
+workflow/cli.py                  21      0   100%
+workflow/config.py                5      0   100%
+workflow/db.py                   10      0   100%
+workflow/models/__init__.py       0      0   100%
+workflow/models/content.py       47      1    98%
+workflow/routes/__init__.py      11      0   100%
+workflow/routes/content.py       52     25    52%
+workflow/routes/security.py      15      1    93%
+workflow/routes/user.py          52     26    50%
+workflow/security.py            103     12    88%
 -----------------------------------------------------
 TOTAL                               336     66    80%
 
@@ -222,7 +222,7 @@ make fmt   # formats the code
 This project uses [Dynaconf](https://dynaconf.com) to manage configuration.
 
 ```py
-from workflowsimpleservice.config import settings
+from workflow.config import settings
 ```
 
 ## Acessing variables
@@ -251,14 +251,14 @@ dynaconf_merge = true
 echo = true
 ```
 
-> `dynaconf_merge` is a boolean that tells if the settings should be merged with the default settings defined in workflowsimpleservice/default.toml.
+> `dynaconf_merge` is a boolean that tells if the settings should be merged with the default settings defined in workflow/default.toml.
 
 ### As environment variables
 ```bash
-export workflowsimpleservice_KEY=value
-export workflowsimpleservice_KEY="@int 42"
-export workflowsimpleservice_KEY="@jinja {{ this.db.uri }}"
-export workflowsimpleservice_DB__uri="@jinja {{ this.db.uri | replace('db', 'data') }}"
+export workflow_KEY=value
+export workflow_KEY="@int 42"
+export workflow_KEY="@jinja {{ this.db.uri }}"
+export workflow_DB__uri="@jinja {{ this.db.uri | replace('db', 'data') }}"
 ```
 
 ### Secrets
@@ -272,7 +272,7 @@ can read those variables.
 ### Switching environments
 
 ```bash
-workflowsimpleservice_ENV=production workflowsimpleservice run
+workflow_ENV=production workflow run
 ```
 
 Read more on https://dynaconf.com

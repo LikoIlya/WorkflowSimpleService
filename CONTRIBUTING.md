@@ -1,6 +1,6 @@
 # How to develop on this project
 
-workflowsimpleservice welcomes contributions from the community.
+workflow welcomes contributions from the community.
 
 **You need PYTHON3!**
 
