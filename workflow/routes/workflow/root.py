@@ -42,11 +42,12 @@ async def get_workflow(
     return use_workflow(workflow_id, session)
 
 
-@router.post("/", 
-             response_model=Workflow, 
-             status_code=status.HTTP_201_CREATED, 
-             summary="Create new workflow"
-             )
+@router.post(
+    "/",
+    response_model=Workflow,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create new workflow",
+)
 async def create_workflow(
     *,
     session: Session = ActiveSession,
@@ -89,7 +90,9 @@ def delete_workflow(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.get("/{workflow_id}/route", summary="Get path of the workflow as node ID list")
+@router.get(
+    "/{workflow_id}/route", summary="Get path of the workflow as node ID list"
+)
 def workflow_route(
     *, session: Session = ActiveSession, workflow_id: WorkflowIDType
 ):
@@ -109,10 +112,10 @@ def workflow_route(
 
 
 @router.get(
-        "/{workflow_id}/route_string",
-        response_class=PlainTextResponse,
-        summary="Get path of the workflow as string"
-    )
+    "/{workflow_id}/route_string",
+    response_class=PlainTextResponse,
+    summary="Get path of the workflow as string",
+)
 def workflow_route_str(
     *, session: Session = ActiveSession, workflow_id: WorkflowIDType
 ):

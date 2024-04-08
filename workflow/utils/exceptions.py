@@ -20,12 +20,6 @@ def raise_validation_errors(
         NodeValidationError | EdgeValidationError | GraphValidationError
     ),
 ):
-    """
-
-    :param message: str:
-    :param exception: (NodeValidationError | EdgeValidationError | GraphValidationError):
-
-    """
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"message": message, "details": exception},

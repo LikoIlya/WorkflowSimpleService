@@ -92,7 +92,7 @@ class Workflow(WorkflowData, table=True):
         directed graph instance.
 
 
-        :returns: Returns the DiGraph representation of the workflow `graph_data`
+        :returns: DiGraph representation of the workflow `graph_data`
 
         :rtype: DiGraph
 

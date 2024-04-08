@@ -94,8 +94,11 @@ class Pathfinder:
     def __to_models_repr__(
         self, *nodes_list: List[NodeIdType]
     ) -> List[ValidNode]:
-        """Converts provided node ids into valid Nodes instances
-        if None of IDs are provided, calculates the valid path from start to end
+        """
+        Converts provided node ids into valid Nodes instances
+
+        if None of IDs are provided,
+            calculates the valid path from start to end
 
         :param nodes_list: List[NodeIdType]:  (Default value = None)
         :param *nodes_list: List[NodeIdType]:
@@ -137,7 +140,9 @@ class Pathfinder:
     @computed_field
     @property
     def graph_snapshot(self) -> dict:
-        """Returns the snapshot of the current workflow graph in node-link format"""
+        """
+        Returns the snapshot of the current workflow graph in node-link format
+        """
         return node_link_data(self.graph)
 
     @computed_field
@@ -167,10 +172,11 @@ class Pathfinder:
         using recursive depth first perform findings
 
 
-        :returns: The path from the start node to the end node, or `None` if no path is found.
+        :returns: The path from the start node to the end node, or `None`.
 
         :rtype: list[NodeID] or None
-        :raises RecursionError: If a recursion reached the same state as was in history path
+        :raises RecursionError: If a recursion reached
+            (the same state as was in history path)
         :raises NetworkXNoPath: If no path found
 
         """
@@ -194,10 +200,12 @@ class Pathfinder:
             """Checks if the entry is in visited set
             In simple, the guard of recursion in workflow
 
-            the implementation minds that the workflow nodes has static conditions in execution context
-            so the state handle that any of execution states will be executed not more than once
+            the implementation minds that the workflow nodes
+            has static conditions in execution context
+            so the state handle that any of execution states
+            will be executed not more than once
 
-            :param entry: StateType: The node and current ctx to check in the workflow.
+            :param entry: StateType: The node and current context to check.
             :param entry: StateType:
 
             """
@@ -209,7 +217,9 @@ class Pathfinder:
 
         # region Recursive finder
         def search(current_node_id: NodeIdType, **ctx: Unpack[SearchContext]):
-            """Searches for the next step in the workflow based on the current node and last message.
+            """
+            Searches for the next step in the workflow
+            based on the current node and last message.
 
             :param current_node_id: NodeID: The current node in the workflow.
             :type current_node_id: NodeIdType
@@ -245,14 +255,15 @@ class Pathfinder:
                             )
                         ),
                         None,
-                    )  # [Start Node/Message Node] Може мати лише одне вихідне ребро
+                    )  # [Start Node/Message Node]
+                    # Може мати лише одне вихідне ребро
                     if current_node.type == "message":
                         ctx["last_message"] = (
                             current_node  # write the last_message to context
                         )
-                case (
-                    "condition"
-                ):  # When met a condition, we need to execute condition rule based on last_message
+                case "condition":
+                    # When met a condition,
+                    # we need to execute condition rule based on last_message
                     condition_result = current_node.execute_condition(
                         ctx.get("last_message", None)
                     )  # Yes/No
@@ -273,14 +284,6 @@ class Pathfinder:
                     raise NotImplementedError(
                         f"Unknown node type: {current_node.__class__.__name__}"
                     )
-                    # OR Try to handle unknown node?
-                    # for (_, out_node_id, data) in self.graph.out_edges(current_node_id, data=True):
-                    #     (if we can have some multiple output paths)
-                    #     if next_step(out_node_id):
-                    #         return True # Recursive end here (inner)
-                    #     else:
-                    #         continue
-                    # return False
             if out_node_id is None:
                 # Claim failed
                 return False  # Recursive end here (inner) fail
@@ -331,7 +334,8 @@ class Pathfinder:
         :type node: Node
         :param node: ValidNode:
         :param node: ValidNode:
-        :raises IndexError: If the start node does not have an ID and cant guess next instance.
+        :raises IndexError: If the start node does not have an ID
+            and cant guess next instance.
 
         """
         if node.id is None:
@@ -397,7 +401,8 @@ class Pathfinder:
         :type node: Node
         :param node: ValidNode:
         :param node: ValidNode:
-        :raises NodeValidationError: If the node is a StartNode or EndNode, it cannot be updated.
+        :raises NodeValidationError: If the node is a StartNode or EndNode,
+            it cannot be updated.
         :raises IndexError: If the node does not exist in the graph.
 
         """
@@ -449,15 +454,18 @@ class Pathfinder:
         :type from_node_id: NodeIdType
         :param to_node_id: NodeID: The ID of the node where the edge ends.
         :type to_node_id: NodeIdType
-        :param edge_data: EdgeContext: Additional data associated with the edge.
+        :param edge_data: EdgeContext: Additional data associated with the edge
         :type edge_data: EdgeContext
         :param from_node_id: NodeIdType:
         :param to_node_id: NodeIdType:
         :param **edge_data: Unpack[EdgeContext]:
         :returns: None
-        :raises EdgeValidationError: If the start node has incoming edges, the end node has outgoing edges,
-                the start node has more than one outgoing edge (for StartNode and MessageNode),
-                the condition node has more than two outgoing edges (for Yes/No),
+        :raises EdgeValidationError: If the start node has incoming edges,
+                the end node has outgoing edges,
+                the start node has more than one outgoing edge
+                (for StartNode and MessageNode),
+                the condition node has more than two outgoing edges
+                (for Yes/No),
                 or the condition node has an invalid condition value.
 
         """
@@ -503,7 +511,9 @@ class Pathfinder:
         to_node_id: NodeIdType,
         **edge_data: Unpack[EdgeContext],
     ) -> None:
-        """Updates the attributes or target of an existing edge in the workflow graph.
+        """
+        Updates the attributes or target
+        of an existing edge in the workflow graph.
 
         Currently, only can be updated:
           - [ConditionNode] condition edge attribute - when changed,
@@ -516,13 +526,13 @@ class Pathfinder:
         the edge is changed target to another node for a single-out nodes type:
             - tries to guess the original edge if it was changed,
             but it's not guaranteed to be correct
-            (guessing is based on the first matched edge with the same attributes).
+            (guessing is based on the first matched edge & same attributes).
 
         :param from_node_id: NodeID: The ID of the node where the edge starts.
         :type from_node_id: NodeIdType
         :param to_node_id: NodeID: The ID of the node where the edge ends.
         :type to_node_id: NodeIdType
-        :param edge_data: EdgeContext: Additional data associated with the edge.
+        :param edge_data: EdgeContext: Additional data associated with the edge
         :type edge_data: EdgeContext
         :param from_node_id: NodeIdType:
         :param to_node_id: NodeIdType:
@@ -545,7 +555,8 @@ class Pathfinder:
             ):  # Condition Node attributes
                 if edge_data.get("condition") not in ["Yes", "No"]:
                     raise EdgeValidationError(
-                        "Condition node out edges can only have Yes or No values"
+                        "Condition node out edges can only have " +
+                        "'Yes'/'No' values"
                     )
                 if self.graph.out_edges[from_node_id, to_node_id].get(
                     "condition"
@@ -623,7 +634,9 @@ class Pathfinder:
             self.graph.add_edge(
                 from_node_id, to_node_id, **edge_data
             )  # Add brand-new edge path here
-        else:  # We can't guess what's the original edge it was. Is it bad data or smth not implemented?
+        else:
+            # We can't guess what's the original edge it was.
+            # Is it bad data or smth not implemented?
             raise EdgeValidationError("Can't guess edge to update")
 
     # D

@@ -77,12 +77,14 @@ def edge_validation(
             case (
                 "start",
                 "condition",
-            ):  # [Condition Node] Може бути з'єднана з Message Node або іншою Condition Node
+            ):  # [Condition Node]
+                # Може бути з'єднана з Message Node або іншою Condition Node
                 raise EdgeValidationError(
                     "Condition node cannot go directly from the start node."
                 )
             case (
-                "start" | "message",
+                "start"
+                | "message",
                 _,
             ):  # [Start Node/Message Node] Може мати лише одне вихідне ребро
                 assert (
@@ -137,7 +139,10 @@ def edge_validation(
                             ]
                         )
                         <= 1
-                    ), f"Only one {condition} path should be exist from node {from_node_id}."
+                    ), (
+                        f"Only one {condition} path should be exist "
+                        + f"from node {from_node_id}."
+                    )
             case _:
                 assert (
                     not edge_data or edge_data == {}
@@ -209,7 +214,8 @@ def node_validation(graph: DiGraph, node: ValidNode) -> ValidNode:
                 ), "Node can only have one outgoing edge."
     except NetworkXError:
         logging.debug(
-            "No nodes found as out_edges for node to check. Nothing serious here"
+            "No nodes found as out_edges for node to check.\n"
+            + "Nothing serious here"
         )
     except AssertionError as e:
         raise NodeValidationError(str(e)) from e
@@ -223,7 +229,7 @@ def validate_graph_data(graph_data: dict) -> dict:
     :type graph_data: dict
     :param graph_data: dict:
     :returns: dict: The validated workflow graph data as dict.
-    :raises GraphValidationError: If the graph violates any of the defined rules.
+    :raises GraphValidationError: If the graph violates any of defined rules
 
     """
     try:
@@ -239,11 +245,11 @@ def validate_graph_data(graph_data: dict) -> dict:
 def validate_node_link_data(node_link_data_dict: dict) -> NodeLinkStructure:
     """Validate the workflow graph data represented as a node-link dictionary.
 
-    :param node_link_data_dict: dict: The workflow graph data as node-link dictionary.
+    :param node_link_data_dict: dict: Graph data as node-link dictionary.
     :type node_link_data_dict: dict: dict
     :param node_link_data_dict: dict:
-    :returns: NodeLinkStructure: The validated workflow graph data as node-link structure.
-    :raises GraphValidationError: If the graph violates any of the defined rules.
+    :returns: NodeLinkStructure: The validated node-link structure.
+    :raises GraphValidationError: If the graph violates any defined rules
 
     """
     try:
@@ -263,7 +269,7 @@ def validate_graph(graph: DiGraph) -> DiGraph:
     :type graph: DiGraph
     :param graph: DiGraph:
     :returns: DiGraph: The validated workflow graph.
-    :raises GraphValidationError: If the graph violates any of the defined rules.
+    :raises GraphValidationError: If the graph violates any defined rules
 
     """
     try:

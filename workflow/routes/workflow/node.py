@@ -79,7 +79,11 @@ def create_node(
     return node
 
 
-@router.delete("/{node_id}/", status_code=status.HTTP_204_NO_CONTENT, summary="Delete node in workflow")
+@router.delete(
+    "/{node_id}/",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete node in workflow",
+)
 def delete_node(
     *,
     session: Session = ActiveSession,
@@ -107,7 +111,7 @@ def patch_node(
     node: Annotated[NodeBody, Body()],
 ) -> ValidNode:
     """
-    Update an existing node by its `node_id` 
+    Update an existing node by its `node_id`
     and Workflow `workflow_id` which it related to
     """
     workflow = use_workflow(workflow_id, session)

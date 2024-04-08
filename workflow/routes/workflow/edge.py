@@ -24,7 +24,9 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=List[Edge], summary="List all edges in workflow")
+@router.get(
+    "/", response_model=List[Edge], summary="List all edges in workflow"
+)
 async def list_edges(
     *, workflow_id: WorkflowIDType, session: Session = ActiveSession
 ):
@@ -48,7 +50,9 @@ async def list_edges(
 
 
 @router.get(
-    "/{in_node_id}/{out_node_id}", response_model=Edge, summary="Get edge in workflow"
+    "/{in_node_id}/{out_node_id}",
+    response_model=Edge,
+    summary="Get edge in workflow",
 )
 async def get_edge(
     *,
@@ -58,14 +62,19 @@ async def get_edge(
     out_node_id: NodeIdType,
 ):
     """
-    Get an edge by its `in_node_id` and `out_node_id` 
+    Get an edge by its `in_node_id` and `out_node_id`
     and Workflow `workflow_id` which it related to
     """
     pathfinder = use_pathfinder(workflow_id, session)
     return pathfinder.get_edge_data(in_node_id, out_node_id)
 
 
-@router.post("/", response_model=Edge, status_code=status.HTTP_201_CREATED, summary="Create new edge in workflow")
+@router.post(
+    "/",
+    response_model=Edge,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create new edge in workflow",
+)
 async def create_edge(
     *,
     session: Session = ActiveSession,
@@ -99,12 +108,13 @@ async def create_edge(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Validation error: {e.title}",
-        )
+        ) from e
 
 
 @router.delete(
-    "/{in_node_id}/{out_node_id}", status_code=status.HTTP_204_NO_CONTENT,
-    summary="Delete edge in workflow"
+    "/{in_node_id}/{out_node_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Delete edge in workflow",
 )
 async def delete_edge(
     *,
@@ -114,7 +124,8 @@ async def delete_edge(
     out_node_id: NodeIdType,
 ):
     """
-    Remove an edge in `Workflow` with `workflow_id` by its `in_node_id` and `out_node_id`
+    Remove an edge in `Workflow` with `workflow_id`
+    by its `in_node_id` and `out_node_id`
     """
     workflow = use_workflow(workflow_id, session)
     pathfinder = use_pathfinder(workflow_id, session, workflow)
@@ -139,7 +150,8 @@ async def patch_edge(
     edge: ConditionEdgeContext | None = None,
 ):
     """
-    Update an edge in `Workflow` with `workflow_id` by its `in_node_id` and `out_node_id`
+    Update an edge in `Workflow` with `workflow_id`
+    by its `in_node_id` and `out_node_id`
     """
     workflow = use_workflow(workflow_id, session)
     pathfinder = use_pathfinder(workflow_id, session, workflow)
