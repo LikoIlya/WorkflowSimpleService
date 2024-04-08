@@ -1,0 +1,81 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "type": "start"
+    },
+    {
+      "id": 1,
+      "type": "end"
+    },
+    {
+      "id": 2,
+      "message_text": "Text To NOT Match",
+      "status": "sent",
+      "type": "message"
+    },
+    {
+      "id": 3,
+      "message_text": "Oh, No! BlockedPath",
+      "status": "opened",
+      "type": "message"
+    },
+    {
+      "id": 4,
+      "rule": "message_text == 'Text To Match' or status == 'opened'",
+      "type": "condition"
+    },
+    {
+      "id": 5,
+      "rule": "message_text =~ '.*BlockedPath$'",
+      "type": "condition"
+    },
+    {
+      "id": 6,
+      "type": "end"
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "target": 2
+    },
+    {
+      "source": 2,
+      "target": 4
+    },
+    {
+      "condition": "Yes",
+      "source": 4,
+      "target": 1
+    },
+    {
+      "condition": "No",
+      "source": 4,
+      "target": 3
+    },
+    {
+      "source": 3,
+      "target": 5
+    },
+    {
+      "source": 5,
+      "target": 4,
+      "condition": "Yes"
+    },
+    {
+      "source": 5,
+      "target": 6,
+      "condition": "No"
+    }
+  ],
+  "path": [
+    0,
+    2,
+    4,
+    3,
+    5,
+    4,
+    1
+  ]
+}

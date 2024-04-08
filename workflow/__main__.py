@@ -1,5 +1,5 @@
 # pragma: no cover
-from .cli import cli
+from . import cli
 
 main = cli
 

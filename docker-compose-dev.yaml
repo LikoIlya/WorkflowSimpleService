@@ -20,7 +20,7 @@ services:
     volumes:
       - $HOME/.postgres/workflow_db/data/postgresql:/var/lib/postgresql/data
     ports:
-      - 5435:5432
+      - "5435:5432"
     environment:
       - POSTGRES_DBS=workflow, workflow_test
       - POSTGRES_USER=postgres

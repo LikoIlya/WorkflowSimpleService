@@ -1,0 +1,52 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "type": "start"
+    },
+    {
+      "id": 1,
+      "type": "end"
+    },
+    {
+      "id": 2,
+      "message_text": "Text To Match",
+      "status": "sent",
+      "type": "message"
+    },
+    {
+      "id": 4,
+      "rule": "message_text == 'Text To Match' or status == 'opened'",
+      "type": "condition"
+    },
+    {
+      "id": 5,
+      "message_text": "DeadEnd",
+      "status": "opened",
+      "type": "message"
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "target": 2
+    },
+    {
+      "source": 2,
+      "target": 4
+    },
+    {
+      "condition": "No",
+      "source": 4,
+      "target": 5
+    }
+  ],
+  "fix": {
+    "add": {
+      "condition": "Yes",
+      "source": 4,
+      "target": 1
+    }
+  },
+  "path": [0, 2, 4, 1]
+}

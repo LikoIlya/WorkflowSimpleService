@@ -1,15 +1,17 @@
 import os
 import sys
+
 import pytest
 from fastapi.testclient import TestClient
 from typer.testing import CliRunner
-from sqlalchemy.exc import IntegrityError
 
 # This next line ensures tests uses its own database and settings environment
 os.environ["FORCE_ENV_FOR_DYNACONF"] = "testing"  # noqa
 # WARNING: Ensure imports from `workflow` comes after this line
-from workflow import app, settings, db  # noqa
-from workflow.cli import create_user, cli  # noqa
+from workflow import app, cli, settings, db  # noqa
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+FIX_DIR = os.path.dirname(os.path.join(HERE, "./fixtures/"))
 
 
 # each test runs on cwd to its temp dir
@@ -45,24 +47,6 @@ def api_client():
 
 
 @pytest.fixture(scope="function")
-def api_client_authenticated():
-
-    try:
-        create_user("admin", "admin", superuser=True)
-    except IntegrityError:
-        pass
-
-    client = TestClient(app)
-    token = client.post(
-        "/token",
-        data={"username": "admin", "password": "admin"},
-        headers={"Content-Type": "application/x-www-form-urlencoded"},
-    ).json()["access_token"]
-    client.headers["Authorization"] = f"Bearer {token}"
-    return client
-
-
-@pytest.fixture(scope="function")
 def cli_client():
     return CliRunner()
 
@@ -79,3 +63,4 @@ def remove_db():
 def initialize_db(request):
     db.create_db_and_tables(db.engine)
     request.addfinalizer(remove_db)
+

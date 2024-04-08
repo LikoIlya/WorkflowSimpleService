@@ -9,7 +9,7 @@ sqlmodel
 typer
 dynaconf
 jinja2
-python-jose[cryptography]
-passlib[bcrypt]
 python-multipart
 psycopg2-binary
+rule-engine
+networkx==3.2.1

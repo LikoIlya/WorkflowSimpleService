@@ -87,11 +87,11 @@ release:          ## Create a new tag for release.
 	@git push -u origin HEAD --tags
 	@echo "Github Actions will detect the new tag and release the new version."
 
-.PHONY: docs
-docs:             ## Build the documentation.
-	@echo "building documentation ..."
-	@$(ENV_PREFIX)mkdocs build
-	URL="site/index.html"; xdg-open $$URL || sensible-browser $$URL || x-www-browser $$URL || gnome-open $$URL  || open $$URL
+# .PHONY: docs
+# docs:             ## Build the documentation.
+# 	@echo "building documentation ..."
+# 	@$(ENV_PREFIX)mkdocs build
+# 	URL="site/index.html"; xdg-open $$URL || sensible-browser $$URL || x-www-browser $$URL || gnome-open $$URL  || open $$URL
 
 .PHONY: switch-to-poetry
 switch-to-poetry: ## Switch to poetry package manager.
@@ -139,8 +139,3 @@ docker-ps: 	  ## Bring down docker dev environment
 .PHONY: docker-log
 docker-logs: 	  ## Bring down docker dev environment
 	@docker-compose -f docker-compose-dev.yaml -p workflow logs -f app
-
-# This project has been generated from rochacbruno/fastapi-project-template
-# __author__ = 'rochacbruno'
-# __repo__ = https://github.com/rochacbruno/fastapi-project-template
-# __sponsor__ = https://github.com/sponsors/rochacbruno/

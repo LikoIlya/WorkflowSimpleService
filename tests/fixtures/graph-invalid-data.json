@@ -1,0 +1,13 @@
+{
+  "KEYS": [
+    {"id": "WRONG_ID_TYPING", "type": "start", "key": "value", "key2": "value2"},
+    {"id": 1, "type": "end"}
+  ],
+  "EDGES": [
+    {"source": "WRONG_ID_TYPING", "target": 1}
+  ],
+  "METADATA": {
+    "WRONG_ID_TYPING": {"type": "node", "label": "WRONG_ID_TYPING"}
+  },
+  "SOME": "value"
+}

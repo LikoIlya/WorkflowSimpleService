@@ -3,6 +3,7 @@ source = workflow
 
 [report]
 omit =
+    ./.venv/
     */python?.?/*
     */site-packages/nose/*
     workflow/__main__.py

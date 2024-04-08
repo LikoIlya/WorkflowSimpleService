@@ -7,7 +7,7 @@ workflow welcomes contributions from the community.
 This instructions are for linux base systems. (Linux, MacOS, BSD, etc.)
 ## Setting up your own fork of this repo.
 
-- On github interface click on `Fork` button.
+- On GitHub interface click on `Fork` button.
 - Clone your fork of this repo. `git clone git@github.com:YOUR_GIT_USERNAME/WorkflowSimpleService.git`
 - Enter the directory `cd WorkflowSimpleService`
 - Add upstream repo `git remote add upstream https://github.com/LikoIlya/WorkflowSimpleService`
@@ -65,7 +65,7 @@ Run `git push origin my_contribution`
 
 ## Submit a pull request
 
-On github interface, click on `Pull Request` button.
+On GitHub interface, click on `Pull Request` button.
 
 Wait CI to run and one of the developers will review your PR.
 ## Makefile utilities
@@ -94,10 +94,10 @@ init:             ## Initialize the project based on an application template.
 ## Making a new release
 
 This project uses [semantic versioning](https://semver.org/) and tags releases with `X.Y.Z`
-Every time a new tag is created and pushed to the remote repo, github actions will
-automatically create a new release on github and trigger a release on PyPI.
+Every time a new tag is created and pushed to the remote repo, GitHub actions will
+automatically create a new release on GitHub and trigger a release on PyPI.
 
-For this to work you need to setup a secret called `PIPY_API_TOKEN` on the project settings>secrets, 
+For this to work you need to set up a secret called `PIPY_API_TOKEN` on the project settings>secrets, 
 this token can be generated on [pypi.org](https://pypi.org/account/).
 
 To trigger a new release all you need to do is.
@@ -106,7 +106,7 @@ To trigger a new release all you need to do is.
     * Make your changes following the steps described above.
     * Commit your changes following the [conventional git commit messages](https://www.conventionalcommits.org/en/v1.0.0/).
 2. Run the tests to ensure everything is working.
-4. Run `make release` to create a new tag and push it to the remote repo.
+3. Run `make release` to create a new tag and push it to the remote repo.
 
 the `make release` will ask you the version number to create the tag, ex: type `0.1.1` when you are asked.
 
