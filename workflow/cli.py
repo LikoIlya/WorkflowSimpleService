@@ -1,3 +1,4 @@
+# noqa, nocover
 import typer
 import uvicorn
 
