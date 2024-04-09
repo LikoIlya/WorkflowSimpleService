@@ -26,20 +26,20 @@ install:          ## Install the project in dev mode.
 
 .PHONY: fmt
 fmt:              ## Format code using black & isort.
-	$(ENV_PREFIX)isort workflow/
-	$(ENV_PREFIX)black -l 79 workflow/
-	$(ENV_PREFIX)black -l 79 tests/
+	$(ENV_PREFIX)ruff format
 
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
-	$(ENV_PREFIX)flake8 workflow/
-	$(ENV_PREFIX)black -l 79 --check workflow/
-	$(ENV_PREFIX)black -l 79 --check tests/
-	$(ENV_PREFIX)mypy --ignore-missing-imports workflow/
+	$(ENV_PREFIX)ruff check
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
-	$(ENV_PREFIX)pytest -v --cov-config .coveragerc --cov=workflow -l --tb=short --maxfail=1 tests/
+	$(ENV_PREFIX)pytest -v -l \
+											--cov-config .coveragerc \
+											--cov-report lcov \
+											--cov=workflow \
+											--tb=short \
+											--maxfail=1 tests/
 	$(ENV_PREFIX)coverage xml
 	$(ENV_PREFIX)coverage html
 
@@ -65,14 +65,8 @@ clean:            ## Clean unused files.
 
 .PHONY: virtualenv
 virtualenv:       ## Create a virtual environment.
-	@if [ "$(USING_POETRY)" ]; then poetry install && exit; fi
-	@echo "creating virtualenv ..."
-	@rm -rf .venv
-	@python3 -m venv .venv
-	@./.venv/bin/pip install -U pip
-	@./.venv/bin/pip install -e .[test]
-	@echo
-	@echo "!!! Please run 'source .venv/bin/activate' to enable the environment !!!"
+	poetry env use
+	poetry install --with development
 
 .PHONY: release
 release:          ## Create a new tag for release.
@@ -110,6 +104,12 @@ switch-to-poetry: ## Switch to poetry package manager.
 	@mv setup.py .github/backup
 	@echo "You have switched to https://python-poetry.org/ package manager."
 	@echo "Please run 'poetry shell' or 'poetry run workflow'"
+
+.PHONY: export-dependencies
+export-dependencies: ## export deps to requirements.txt
+	@poetry self add poetry-plugin-export
+	@poetry export --output requirements.txt
+	@poetry export --only=development --output requirements-test.txt 
 
 .PHONY: init
 init:             ## Initialize the project based on an application template.

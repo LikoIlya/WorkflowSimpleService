@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fastapi import HTTPException
 from sqlmodel import Session
 
@@ -28,7 +26,7 @@ def use_workflow(
 def use_pathfinder(
     workflow_id: WorkflowIDType,
     session: Session = ActiveSession,
-    workflow: Optional[Workflow] = None,
+    workflow: Workflow | None = None,
 ):
     """
 

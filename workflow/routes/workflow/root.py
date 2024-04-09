@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter, Request, status
 from fastapi.exceptions import HTTPException
 from fastapi.responses import PlainTextResponse, Response
@@ -16,7 +14,7 @@ from .dependencies import use_pathfinder, use_workflow
 router = APIRouter(tags=["workflow"])
 
 
-@router.get("/", response_model=List[Workflow], summary="List all workflows")
+@router.get("/", response_model=list[Workflow], summary="List all workflows")
 async def list_workflows(*, session: Session = ActiveSession):
     """
     List all workflows:

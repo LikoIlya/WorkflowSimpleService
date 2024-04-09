@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
 from fastapi.responses import Response
@@ -25,7 +23,7 @@ router = APIRouter(
 
 
 @router.get(
-    "/", response_model=List[Edge], summary="List all edges in workflow"
+    "/", response_model=list[Edge], summary="List all edges in workflow"
 )
 async def list_edges(
     *, workflow_id: WorkflowIDType, session: Session = ActiveSession
@@ -161,12 +159,12 @@ async def patch_edge(
         session.commit()
         session.refresh(workflow)
         return pathfinder.get_edge_data(in_node_id, out_node_id)
-    except IndexError:
+    except IndexError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="This edge not found"
-        )
-    except NotChanged:
+        ) from e
+    except NotChanged as e:
         raise HTTPException(
             status_code=status.HTTP_304_NOT_MODIFIED,
             detail="This edge is not modified",
-        )
+        ) from e

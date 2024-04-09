@@ -6,11 +6,11 @@ from networkx import DiGraph, NetworkXNoPath
 
 from workflow.models.edge import ConditionEdge, SimpleEdge
 from workflow.models.node import (
+    ConditionNode,
+    EndNode,
+    MessageNode,
     NodeType,
     StartNode,
-    EndNode,
-    ConditionNode,
-    MessageNode,
 )
 from workflow.models.node.factory import NodeFactory
 from workflow.utils import Pathfinder
@@ -20,15 +20,15 @@ from workflow.utils.validation import (
     GraphValidationError,
     NodeValidationError,
 )
+
 from .utils import (
+    GraphFixableCases,
+    GraphInvalidDataCases,
+    GraphValidCases,
+    get_graph,
     graph_fixtures,
     load_graph,
-    GraphValidCases,
-    GraphFixableCases,
-    get_graph,
-    GraphInvalidDataCases,
 )
-
 
 
 def fix_graph(key: GraphFixableCases) -> dict:
@@ -44,7 +44,6 @@ def fix_graph(key: GraphFixableCases) -> dict:
 
 
 class TestPathfinder:
-
     @pytest.mark.parametrize(
         "graph_sample_key,data",
         [
@@ -92,10 +91,14 @@ class TestPathfinder:
                 graph_error.match("The graph is multigraph.")
             case "multiple-starts":
                 graph_error.match("Start must be only one.")
-            # This is a bit tricky, because we have to check the cause of the error
-            # The graph validation internally raises `NodeValidationError` or `EdgeValidationError`
-            # So we have to check the cause of the error in the `graph_error.value.__cause__` to make sure
-            # that the error is raised by the validation of the corresponding content
+            # This is a bit tricky,
+            # because we have to check the cause of the error
+            # The graph validation internally raises
+            # `NodeValidationError` or `EdgeValidationError`
+            # So we have to check the cause of
+            # the error in the `graph_error.value.__cause__` to make sure
+            # that the error is raised by
+            # the validation of the corresponding content
             case "invalid-edges":
                 assert isinstance(
                     graph_error.value.__cause__, EdgeValidationError
@@ -137,7 +140,8 @@ class TestPathfinder:
         """
         This test make sure we can add nodes correctly
 
-        Test perform transform `simple` graph into a `simple-loop`-like graph by adding nodes
+        Test perform transform `simple` graph into
+        a `simple-loop`-like graph by adding nodes
         """
         graph = load_graph("simple")
         pathfinder = Pathfinder(graph)
@@ -160,14 +164,16 @@ class TestPathfinder:
                 case _:  # But can add the others
                     pathfinder.add_node(node)
                     assert node.id in pathfinder.graph.nodes
-        # And make sure nothing brakes here (we don't add edges so nothing should be changed)
+        # And make sure nothing brakes here
+        # (we don't add edges so nothing should be changed)
         assert pathfinder.path == graph_fixtures["simple"]["path"]
 
     def test_add_update_edge(self):
         """
         This test make sure we can add edges correctly
 
-        Test perform transform `simple` graph into a `simple-loop` graph by adding nodes
+        Test perform transform `simple` graph into
+        a `simple-loop` graph by adding nodes
         """
         graph = load_graph("simple")
         pathfinder = Pathfinder(graph)
@@ -247,7 +253,7 @@ class TestPathfinder:
                 if len(pathfinder.graph.out_edges(edge.in_node_id)) <= 1:
                     with pytest.raises(
                         ValueError,
-                        match=f"Only one {edge.condition} path should be exist from node {edge.in_node_id}.",
+                        match=f"Only one {edge.condition} path should be exist from node {edge.in_node_id}.",  # noqa E501
                     ):
                         # Can't add same condition another time
                         pathfinder.add_edge(
@@ -261,7 +267,7 @@ class TestPathfinder:
                     with pytest.raises(
                         ValueError,
                         match=re.escape(
-                            "Condition node can only have two outgoing edges (Yes/No)."
+                            "Condition node can only have two outgoing edges (Yes/No)."  # noqa E501
                         ),
                     ):
                         # Can't add more than two conditions
@@ -292,7 +298,8 @@ class TestPathfinder:
             # Can't add input to start nodes
             pathfinder.add_edge(3, 0)
 
-        # Make sure nothing brakes here (we don't add edges so nothing should be changed)
+        # Make sure nothing brakes here
+        # (we don't add edges so nothing should be changed)
         assert pathfinder.path == graph_fixtures["simple"]["path"]
 
         # Let's update the node 2 to finish transformation
@@ -304,8 +311,10 @@ class TestPathfinder:
 
     def test_from_zero_to_hero(self):
         """
-        Test that initialize an empty graph inside `Pathfinder` and utilize it to build a graph
+        Test that initialize an empty graph inside `Pathfinder`
+        and utilize it to build a graph
         Than adds nodes and edges between them
+
                       start
                         ↓
         message(text="zero", status="pending")
@@ -322,7 +331,7 @@ class TestPathfinder:
                       (yes)
                         ↓
                        end
-        """
+        """  # noqa E501
         graph = DiGraph()
         pathfinder = Pathfinder(graph)
         nodes = [
@@ -438,21 +447,16 @@ class TestPathfinder:
         graph = load_graph("simple")
         pathfinder = Pathfinder(graph)
         # Let's update the edge 4, 1 to the same
-        assert (4, 1, {"condition": "Yes"}) in pathfinder.graph.edges(
-            data=True
-        )
+        assert (4, 1, {"condition": "Yes"}) in pathfinder.graph.edges(data=True)
         with pytest.raises(NotChanged):
             pathfinder.update_edge(4, 1, condition="Yes")
-        assert (4, 1, {"condition": "Yes"}) in pathfinder.graph.edges(
-            data=True
-        )
+        assert (4, 1, {"condition": "Yes"}) in pathfinder.graph.edges(data=True)
         assert pathfinder.path == graph_fixtures["simple"]["path"]
-        # Let's swap conditions the edge 4, 2 and 4, 1, this should make a dead-loop
+        # Let's swap conditions the edge 4, 2 and 4, 1,
+        # this should make a dead-loop
         pathfinder.update_edge(4, 1, condition="No")
         assert (4, 1, {"condition": "No"}) in pathfinder.graph.edges(data=True)
-        assert (4, 2, {"condition": "Yes"}) in pathfinder.graph.edges(
-            data=True
-        )
+        assert (4, 2, {"condition": "Yes"}) in pathfinder.graph.edges(data=True)
         with pytest.raises(
             RecursionError, match="There is a loop in the workflow."
         ):

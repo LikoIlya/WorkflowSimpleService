@@ -1,21 +1,22 @@
-from typing import get_args, Dict
+from typing import get_args
 
 import pytest
 
-from .utils import (
-    graph_fixtures,
-    GraphValidCases,
-    GraphFixableCases,
-    GraphInvalidDataCases,
-    sorting_key_node,
-    sorting_key_edge,
-)
 from workflow.models.node.factory import NodeFactory
 from workflow.models.workflow import Workflow
 
+from .utils import (
+    GraphFixableCases,
+    GraphInvalidDataCases,
+    GraphValidCases,
+    graph_fixtures,
+    sorting_key_edge,
+    sorting_key_node,
+)
+
 
 class TestWorkflowAPI:
-    workflows: Dict[str, int] = {}
+    workflows: dict[str, int] = {}
 
     def test_workflow_create_empty(self, api_client):
         response = api_client.post(
@@ -43,14 +44,14 @@ class TestWorkflowAPI:
         response_json = response.json()
         model = Workflow(**response_json)
         assert model
-        data_nodes, model_nodes = [
-            sorted(l, key=sorting_key_node)
-            for l in (data["nodes"], model.graph_data["nodes"])
-        ]
-        data_links, model_links = [
-            sorted(l, key=sorting_key_edge)
-            for l in (data["links"], model.graph_data["links"])
-        ]
+        data_nodes, model_nodes = (
+            sorted(element, key=sorting_key_node)
+            for element in (data["nodes"], model.graph_data["nodes"])
+        )
+        data_links, model_links = (
+            sorted(element, key=sorting_key_edge)
+            for element in (data["links"], model.graph_data["links"])
+        )
         assert model_nodes == data_nodes
         assert model_links == data_links
         assert model.graph_data["directed"]
@@ -90,14 +91,14 @@ class TestWorkflowAPI:
             else:
                 data = graph_fixtures[dataindex]
 
-            data_nodes, model_nodes = [
-                sorted(l, key=sorting_key_node)
-                for l in (data["nodes"], model.graph_data["nodes"])
-            ]
-            data_links, model_links = [
-                sorted(l, key=sorting_key_edge)
-                for l in (data["links"], model.graph_data["links"])
-            ]
+            data_nodes, model_nodes = (
+                sorted(element, key=sorting_key_node)
+                for element in (data["nodes"], model.graph_data["nodes"])
+            )
+            data_links, model_links = (
+                sorted(element, key=sorting_key_edge)
+                for element in (data["links"], model.graph_data["links"])
+            )
             assert model_nodes == data_nodes
             assert model_links == data_links
             assert model.graph_data["directed"]
@@ -113,14 +114,14 @@ class TestWorkflowAPI:
             else:
                 data = graph_fixtures[key]
 
-            data_nodes, model_nodes = [
-                sorted(l, key=sorting_key_node)
-                for l in (data["nodes"], workflow.graph_data["nodes"])
-            ]
-            data_links, model_links = [
-                sorted(l, key=sorting_key_edge)
-                for l in (data["links"], workflow.graph_data["links"])
-            ]
+            data_nodes, model_nodes = (
+                sorted(element, key=sorting_key_node)
+                for element in (data["nodes"], workflow.graph_data["nodes"])
+            )
+            data_links, model_links = (
+                sorted(element, key=sorting_key_edge)
+                for element in (data["links"], workflow.graph_data["links"])
+            )
             assert model_nodes == data_nodes
             assert model_links == data_links
             assert workflow.graph_data["directed"]

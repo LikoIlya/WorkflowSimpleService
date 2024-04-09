@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated
 
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
@@ -26,14 +26,12 @@ router = APIRouter(
 @router.get("/", summary="List all nodes in workflow")
 def list_nodes(
     *, session: Session = ActiveSession, workflow_id: WorkflowIDType
-) -> List[ValidNode]:
+) -> list[ValidNode]:
     """
     List all nodes in the Workflow, related to `workflow_id`
     """
     pathfinder = use_pathfinder(workflow_id, session)
-    nodes = [
-        pathfinder.get_node(node_id) for node_id in pathfinder.graph.nodes
-    ]
+    nodes = [pathfinder.get_node(node_id) for node_id in pathfinder.graph.nodes]
     return nodes
 
 
@@ -50,8 +48,10 @@ def get_node(
     pathfinder = use_pathfinder(workflow_id, session)
     try:
         return pathfinder.get_node(node_id)
-    except IndexError:
-        raise HTTPException(status_code=404, detail="This node not found")
+    except IndexError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="This node not found"
+        ) from e
 
 
 @router.post(

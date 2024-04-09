@@ -1,5 +1,6 @@
 import os
 import sys
+from contextlib import suppress
 
 import pytest
 from fastapi.testclient import TestClient
@@ -53,14 +54,11 @@ def cli_client():
 
 def remove_db():
     # Remove the database file
-    try:
+    with suppress(FileNotFoundError):
         os.remove("testing.db")
-    except FileNotFoundError:
-        pass
 
 
 @pytest.fixture(scope="session", autouse=True)
 def initialize_db(request):
     db.create_db_and_tables(db.engine)
     request.addfinalizer(remove_db)
-

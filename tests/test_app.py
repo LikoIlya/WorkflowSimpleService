@@ -23,7 +23,7 @@ def test_cors_header(api_client):
         for url in valid_origin
     ]
 
-    for res, url in zip(valid_responses, valid_origin):
+    for res, url in zip(valid_responses, valid_origin, strict=True):
         assert res.headers.get("access-control-allow-origin") == url
 
     invalid_responses = [

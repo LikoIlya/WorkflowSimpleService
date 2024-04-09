@@ -63,7 +63,7 @@ class TestEdgeApi:
         assert response.status_code == 400  # validation error
         assert response.json() == {
             "details": "This edge can't have attributes.",
-            "message": "Well well, we have an error with edge validation. Please try again.",
+            "message": "Well well, we have an error with edge validation. Please try again.",  # noqa E501
         }
         response = api_client.post(
             f"/workflow/{current_workflow.id}/edges/",
@@ -95,7 +95,7 @@ class TestEdgeApi:
         assert response.status_code == 400  # validation error
         assert response.json() == {
             "details": "This edge can't have attributes.",
-            "message": "Well well, we have an error with edge validation. Please try again.",
+            "message": "Well well, we have an error with edge validation. Please try again.",  # noqa E501
         }
 
         response = api_client.patch(

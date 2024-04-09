@@ -1,4 +1,3 @@
-import io
 import os
 
 from fastapi import FastAPI, Request
@@ -24,7 +23,7 @@ def read(*paths, **kwargs):
     >>> read("VERSION")
     """
     content = ""
-    with io.open(
+    with open(
         os.path.join(os.path.dirname(__file__), *paths),
         encoding=kwargs.get("encoding", "utf8"),
     ) as open_file:
@@ -75,15 +74,13 @@ app.include_router(main_router)
 
 @app.exception_handler(GraphValidationError)
 async def graph_exception_handler(request: Request, exc: GraphValidationError):
-    return raise_validation_errors(
-        "Oops! The workflow graph is invalid.", str(exc)
-    )
+    return raise_validation_errors("Oops! The workflow graph is invalid.", exc)
 
 
 @app.exception_handler(NodeValidationError)
 async def node_exception_handler(request: Request, exc: NodeValidationError):
     return raise_validation_errors(
-        "Oh dear! The workflow node is invalid.", str(exc)
+        "Oh dear! The workflow node is invalid.", exc
     )
 
 
@@ -91,7 +88,7 @@ async def node_exception_handler(request: Request, exc: NodeValidationError):
 async def edge_exception_handler(request: Request, exc: EdgeValidationError):
     return raise_validation_errors(
         "Well well, we have an error with edge validation. Please try again.",
-        str(exc),
+        exc,
     )
 
 

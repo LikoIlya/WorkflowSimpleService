@@ -40,8 +40,6 @@ class NodeFactory:
                 case NodeType.end:
                     return EndNode(**kwargs)
                 case _:
-                    raise NodeValidationError(
-                        f"Invalid node type: {node_type}"
-                    )
+                    raise NodeValidationError(f"Invalid node type: {node_type}")
         except ValidationError as e:
             raise NodeValidationError(e.errors()) from e

@@ -1,7 +1,7 @@
 import json
 import logging
 from functools import reduce
-from typing import List, Optional, Set, Tuple, Unpack
+from typing import Unpack
 from uuid import UUID, uuid4
 
 from networkx import (
@@ -43,7 +43,7 @@ class NotChanged(Exception):
 class SearchContext(BaseModel):
     """Represents search context to access stored values in execution"""
 
-    last_message: Optional[MessageNode] = None
+    last_message: MessageNode | None = None
 
 
 class Pathfinder:
@@ -92,8 +92,8 @@ class Pathfinder:
     # region Node related private helpers
 
     def __to_models_repr__(
-        self, *nodes_list: List[NodeIdType]
-    ) -> List[ValidNode]:
+        self, *nodes_list: list[NodeIdType]
+    ) -> list[ValidNode]:
         """
         Converts provided node ids into valid Nodes instances
 
@@ -147,7 +147,7 @@ class Pathfinder:
 
     @computed_field
     @property
-    def path(self) -> List[NodeIdType]:
+    def path(self) -> list[NodeIdType]:
         """Shortcut to retrieve the calculated path"""
         return self.find_path_recursive()
 
@@ -167,7 +167,7 @@ class Pathfinder:
     # endregion
 
     # region Search module (recursive)
-    def find_path_recursive(self) -> List[NodeIdType]:
+    def find_path_recursive(self) -> list[NodeIdType]:
         """Finds a path from the start node to the end node in the workflow.
         using recursive depth first perform findings
 
@@ -190,10 +190,10 @@ class Pathfinder:
         ):
             raise NetworkXNoPath("No path found")
 
-        StateType = Tuple[NodeIdType, Unpack[SearchContext]]
+        StateType = tuple[NodeIdType, Unpack[SearchContext]]
         path = []
         context = SearchContext()
-        visited: Set[StateType] = set()
+        visited: set[StateType] = set()
 
         # region State Guard
         def not_visited_validator(entry: StateType) -> bool:
@@ -550,13 +550,11 @@ class Pathfinder:
             if self.graph.out_edges[from_node_id, to_node_id] == edge_data:
                 raise NotChanged()
             attr = {(from_node_id, to_node_id): edge_data}
-            if isinstance(
-                from_mod, ConditionNode
-            ):  # Condition Node attributes
+            if isinstance(from_mod, ConditionNode):  # Condition Node attributes
                 if edge_data.get("condition") not in ["Yes", "No"]:
                     raise EdgeValidationError(
-                        "Condition node out edges can only have " +
-                        "'Yes'/'No' values"
+                        "Condition node out edges can only have "
+                        + "'Yes'/'No' values"
                     )
                 if self.graph.out_edges[from_node_id, to_node_id].get(
                     "condition"
@@ -565,9 +563,7 @@ class Pathfinder:
                         (u, v): {
                             **data,
                             "condition": (
-                                "Yes"
-                                if data.get("condition") == "No"
-                                else "No"
+                                "Yes" if data.get("condition") == "No" else "No"
                             ),
                         }
                         for (u, v, data) in self.graph.out_edges(
@@ -627,9 +623,7 @@ class Pathfinder:
                     self.graph, from_node_id, to_node_id, **edge_data
                 )  # Validate new path
             except EdgeValidationError as e:
-                self.graph.add_edge(
-                    u, old_to_node, **backup
-                )  # Revert old node
+                self.graph.add_edge(u, old_to_node, **backup)  # Revert old node
                 raise e
             self.graph.add_edge(
                 from_node_id, to_node_id, **edge_data

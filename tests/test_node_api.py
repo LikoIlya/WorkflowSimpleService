@@ -1,10 +1,9 @@
 import pytest
 
-from .utils import get_dummy_workflow, sorting_key_node, graph_fixtures
+from .utils import get_dummy_workflow, graph_fixtures, sorting_key_node
 
 
 class TestNodeApi:
-
     @pytest.fixture(scope="class", name="current_workflow", autouse=True)
     def get_workflow(self, request):
         return get_dummy_workflow(graph_fixtures["simple-loop"], request)
@@ -27,13 +26,9 @@ class TestNodeApi:
         assert response.json() == {"id": 0, "type": "start"}
 
     def test_delete_node(self, api_client, current_workflow):
-        response = api_client.delete(
-            f"/workflow/{current_workflow.id}/nodes/7"
-        )
+        response = api_client.delete(f"/workflow/{current_workflow.id}/nodes/7")
         assert response.status_code == 404
-        response = api_client.delete(
-            f"/workflow/{current_workflow.id}/nodes/1"
-        )
+        response = api_client.delete(f"/workflow/{current_workflow.id}/nodes/1")
         assert response.status_code == 204
         assert (
             api_client.get(

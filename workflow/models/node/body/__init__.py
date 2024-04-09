@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Union
+from typing import Annotated, Any
 
 from pydantic import Discriminator, Tag
 
@@ -29,10 +29,10 @@ def get_node_body_type(v: Any) -> str:
 
 
 NodeBody = Annotated[
-    Union[
-        Annotated[MessageNodeBody, Tag("message")],
-        Annotated[ConditionNodeBody, Tag("condition")],
-        Annotated[EmptyNodeBody, Tag("empty")],
-    ],
+    Annotated[MessageNodeBody, Tag("message")]
+    | Annotated[ConditionNodeBody, Tag("condition")]
+    | Annotated[EmptyNodeBody, Tag("empty")],
     Discriminator(get_node_body_type),
 ]
+
+__all__ = ["NodeBody", "ConditionNodeBody", "EmptyNodeBody", "MessageNodeBody"]
