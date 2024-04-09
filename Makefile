@@ -26,15 +26,13 @@ install:          ## Install the project in dev mode.
 
 .PHONY: fmt
 fmt:              ## Format code using black & isort.
-	FMT_CMD=ruff format
-	@if [ "$(USING_POETRY)" ]; then poetry run $(FMT_CMD) && exit; fi
-	$(ENV_PREFIX)$(FMT_CMD)
+	@if [ "$(USING_POETRY)" ]; then poetry run ruff format && exit; fi
+	$(ENV_PREFIX)ruff format
 
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
-	LINT_CMD=ruff check
-	@if [ "$(USING_POETRY)" ]; then poetry run $(LINT_CMD) && exit; fi
-	$(ENV_PREFIX)$(LINT_CMD)
+	@if [ "$(USING_POETRY)" ]; then poetry run ruff check && exit; fi
+	$(ENV_PREFIX)ruff check
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
