@@ -22,5 +22,5 @@ def raise_validation_errors(
 ):
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
-        content={"message": message, "details": exception},
+        content={"message": message, "details": str(exception)},
     )
