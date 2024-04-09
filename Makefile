@@ -65,7 +65,7 @@ clean:            ## Clean unused files.
 
 .PHONY: virtualenv
 virtualenv:       ## Create a virtual environment.
-	poetry env use
+	poetry env use python3
 	poetry install --with development
 
 .PHONY: release
