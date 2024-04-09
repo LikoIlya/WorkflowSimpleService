@@ -11,7 +11,8 @@ help:             ## Show the help.
 .PHONY: show
 show:             ## Show the current environment.
 	@echo "Current environment:"
-  @poetry env info
+	@poetry env info
+
 
 .PHONY: install
 install:          ## Install the project in dev mode.
@@ -56,6 +57,7 @@ clean:            ## Clean unused files.
 virtualenv:       ## Create a virtual environment.
 	@poetry env use python3
 	@poetry install --with development
+
 
 .PHONY: release
 release:          ## Create a new tag for release.
