@@ -30,7 +30,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: 'poetry'
       - name: Install project
-        run: make install
+        run: make virtualenv
       - name: Run linter
         run: make lint
 
@@ -51,7 +51,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: 'poetry'
       - name: Install project
-        run: make install
+        run: make virtualenv
       - name: Run tests
         run: make test
       - if: ${{ matrix.os == 'ubuntu-latest' }}
