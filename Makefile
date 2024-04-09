@@ -26,11 +26,15 @@ install:          ## Install the project in dev mode.
 
 .PHONY: fmt
 fmt:              ## Format code using black & isort.
-	$(ENV_PREFIX)ruff format
+	FMT_CMD=ruff format
+	@if [ "$(USING_POETRY)" ]; then poetry run $(FMT_CMD) && exit; fi
+	$(ENV_PREFIX)$(FMT_CMD)
 
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
-	$(ENV_PREFIX)ruff check
+	LINT_CMD=ruff check
+	@if [ "$(USING_POETRY)" ]; then poetry run $(LINT_CMD) && exit; fi
+	$(ENV_PREFIX)$(LINT_CMD)
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
@@ -65,8 +69,8 @@ clean:            ## Clean unused files.
 
 .PHONY: virtualenv
 virtualenv:       ## Create a virtual environment.
-	poetry env use python3
-	poetry install --with development
+	@poetry env use python3
+	@poetry install --with development
 
 .PHONY: release
 release:          ## Create a new tag for release.
@@ -110,10 +114,6 @@ export-dependencies: ## export deps to requirements.txt
 	@poetry self add poetry-plugin-export
 	@poetry export --output requirements.txt
 	@poetry export --only=development --output requirements-test.txt 
-
-.PHONY: init
-init:             ## Initialize the project based on an application template.
-	@./.github/init.sh
 
 .PHONY: shell
 shell:            ## Open a shell in the project.
